@@ -55,7 +55,7 @@ public class Http_cats_facts {
     }
 
     public void PrintFact (CatData data){
-        System.out.println("New fact about Cat \n" + data.catText);
+        System.out.println("New fact about Cat: \n" + data.catText);
     }
 
     public static void main(String[] args) throws IOException {

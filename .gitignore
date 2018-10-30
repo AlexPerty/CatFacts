@@ -1,3 +1,4 @@
 .idea/
 catFacts.iml
 *.class
+*.log

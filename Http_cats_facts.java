@@ -1,0 +1,81 @@
+package Out_quests;
+
+import com.javarush.task.task11.task1118.Solution;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+/**
+ * Created by Perty on 27-Oct-18.
+ */
+public class Http_cats_facts {
+
+    public static String url_adress = "https://cat-fact.herokuapp.com/facts/random?animal=cat&amount=1";
+        public String GetApiDate (String urlString) throws IOException{
+            URL url = null;
+            BufferedReader reader = null;
+            StringBuilder stringBuilder;
+
+            try{
+                url = new URL(urlString);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setReadTimeout(15 * 1000);
+                connection.connect();
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                stringBuilder = new StringBuilder();
+
+                String line = null;
+                   while ((line = reader.readLine()) != null){
+                      stringBuilder.append(line + "\n");
+                    }
+                return stringBuilder.toString();
+            }
+            catch (Exception e){
+                throw e;
+            } finally {
+                if (reader != null)
+                    try{
+                        reader.close();
+                    }catch (IOException ee){
+                        ee.printStackTrace();
+                    }
+            }
+        }
+
+    public static class CatDate{
+        public String catText;
+    }
+
+    public  CatDate GetCatDate(String rawData){
+        JSONObject obj = new JSONObject(rawData);
+        String text = obj.getString("text");
+        CatDate catDate = new CatDate();
+        catDate.catText = text;
+
+        return catDate;
+    }
+
+    public void PrintFact (CatDate date){
+        System.out.println("New fact about Cat \n" + date.catText);
+    }
+
+    public static void main(String[] args) throws IOException {
+        //----1----
+        Http_cats_facts fact = new Http_cats_facts();
+
+        String date = fact.GetApiDate(url_adress);
+//        System.out.println("Raw Data");
+//        System.out.println(date);
+
+        //----2----
+        CatDate catDate = fact.GetCatDate(date);
+
+        //-----3----
+        fact.PrintFact(catDate);
+    }
+}
